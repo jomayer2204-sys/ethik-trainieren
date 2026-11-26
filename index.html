@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ethik trainieren</title>
+<meta name="description" content="Trainiere für die Ethik-Probe: Glück, Freizeit und Freundschaft.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A7%AD%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f6f8fc; --card:#ffffff; --text:#1d2433; --muted:#566074; --line:#cfd6e4;
+  --accent:#2f5da8; --accent-text:#ffffff; --accent-soft:#e3ecfb;
+  --ok:#1b6e45; --ok-bg:#ddf4e6; --bad:#a8231c; --bad-bg:#fde4e1;
+  --y:#fff2c2; --g:#dcf2e3; --b:#dbe9fc; --p:#ece3fa; --o:#ffe4d0;
+  --radius:16px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#141824; --card:#1d2334; --text:#eef1f8; --muted:#aab3c6; --line:#38425c;
+    --accent:#8db4f5; --accent-text:#10192b; --accent-soft:#2a3858;
+    --ok:#7fe0aa; --ok-bg:#183a2b; --bad:#ff9d96; --bad-bg:#4a2220;
+    --y:#4a4120; --g:#1f4130; --b:#223e66; --p:#3a2f5a; --o:#553a24;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);
+  font-family:"Century Gothic","Trebuchet MS","Segoe UI",system-ui,sans-serif;font-size:18px;line-height:1.5}
+header.top{background:var(--card);border-bottom:2px solid var(--line);padding:14px 16px}
+header.top .in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+header.top a.logo{color:var(--text);text-decoration:none;font-weight:700;font-size:1.15rem}
+header.top .sub{color:var(--muted);font-size:.9rem}
+main{max-width:760px;margin:0 auto;padding:18px 16px 40px;outline:none}
+h1{font-size:1.6rem;line-height:1.25;margin:.2em 0 .4em}
+h2{font-size:1.3rem;line-height:1.3;margin:.2em 0 .5em}
+p{margin:.4em 0 .8em}
+.lead{color:var(--muted)}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.btn{display:inline-block;border:0;border-radius:999px;padding:12px 22px;background:var(--accent);color:var(--accent-text);font-weight:700;min-height:48px;text-decoration:none}
+.btn.sec{background:transparent;color:var(--accent);border:2px solid var(--accent)}
+.btn[disabled]{opacity:.5;cursor:default}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.grid{display:grid;grid-template-columns:1fr;gap:12px;margin:16px 0}
+@media (min-width:560px){.grid{grid-template-columns:1fr 1fr}}
+.tile{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;border:2px solid var(--line);border-radius:var(--radius);padding:14px;background:var(--card);text-decoration:none;color:inherit}
+.tile:hover{border-color:var(--accent)}
+.tile .ico{font-size:1.9rem;line-height:1;border-radius:12px;padding:10px;flex:none}
+.tile .t{font-weight:700;display:block}
+.tile .st{display:block;font-size:.85rem;color:var(--muted);margin-top:2px}
+.tile.done .st{color:var(--ok);font-weight:700}
+.c-y .ico{background:var(--y)}.c-g .ico{background:var(--g)}.c-b .ico{background:var(--b)}.c-p .ico{background:var(--p)}.c-o .ico{background:var(--o)}
+.probe-tile{background:var(--accent-soft);border-color:var(--accent)}
+.card{background:var(--card);border:2px solid var(--line);border-radius:var(--radius);padding:16px;margin:12px 0}
+.merke{border-left:8px solid var(--accent)}
+.merke ul{margin:.3em 0 .3em 1.1em;padding:0}
+.merke li{margin:.3em 0}
+.bar{display:flex;align-items:center;gap:10px;margin:4px 0 12px}
+.dots{display:flex;gap:6px;flex-wrap:wrap}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.dot.now{background:var(--accent)} .dot.past{background:var(--ok)}
+.q{font-weight:700;margin:.2em 0 .6em}
+.hint{color:var(--muted);font-size:.9rem;margin:-.2em 0 .8em}
+.opts{display:grid;gap:10px}
+.opt,.chip{border:2px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-align:left;min-height:48px}
+.chip{border-radius:999px;padding:8px 16px;min-height:44px;text-align:center}
+.opt[aria-pressed="true"],.chip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);font-weight:700}
+.opt.ok,.chip.ok,.row.ok{border-color:var(--ok);background:var(--ok-bg)}
+.opt.bad,.chip.bad,.row.bad{border-color:var(--bad);background:var(--bad-bg)}
+.opt.ok::before{content:"✓ ";font-weight:700;color:var(--ok)}
+.opt.bad::before{content:"✗ ";font-weight:700;color:var(--bad)}
+.opt.miss{border-style:dashed;border-color:var(--ok)}
+.opt.miss::before{content:"← das gehört dazu: ";color:var(--ok);font-weight:700}
+.row{border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin:10px 0;background:var(--card)}
+.row .item{margin:0 0 8px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.note{margin-top:6px;font-weight:700;font-size:.95rem}
+.row.ok .note{color:var(--ok)} .row.bad .note{color:var(--bad)}
+.wordbox{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px;padding:10px;border:2px dashed var(--line);border-radius:12px}
+.wordbox span{background:var(--b);border-radius:8px;padding:4px 12px;font-weight:700}
+.gaptext{line-height:2.4}
+select{font:inherit;color:var(--text);background:var(--card);border:2px solid var(--line);border-radius:10px;padding:6px 8px;min-height:44px;max-width:100%}
+select.ok{border-color:var(--ok);background:var(--ok-bg)} select.bad{border-color:var(--bad);background:var(--bad-bg)}
+.gapfix{font-weight:700;color:var(--ok)}
+textarea{width:100%;font:inherit;color:var(--text);background:var(--card);border:2px solid var(--line);border-radius:12px;padding:10px;min-height:96px}
+.muster{background:var(--g);border-radius:12px;padding:12px;margin:10px 0}
+.muster b{display:block;margin-bottom:4px}
+.checks label{display:flex;gap:10px;align-items:flex-start;margin:8px 0}
+.checks input{width:24px;height:24px;flex:none;margin-top:3px}
+.fb{margin-top:12px;font-weight:700}
+.fb .why{font-weight:400;color:var(--muted);display:block;margin-top:4px}
+.score{font-size:2rem;font-weight:700;margin:.1em 0}
+.stars{font-size:1.6rem;letter-spacing:4px}
+.note-big{display:inline-block;background:var(--accent);color:var(--accent-text);border-radius:14px;padding:6px 20px;font-size:2rem;font-weight:700}
+.sentence{background:var(--b);border-radius:12px;padding:12px;margin:12px 0;font-weight:700}
+.step-label{font-weight:700;margin:14px 0 6px}
+footer{max-width:760px;margin:0 auto;padding:0 16px 40px;color:var(--muted);font-size:.85rem}
+footer button{background:none;border:0;color:var(--accent);text-decoration:underline;padding:0;font-size:inherit}
+</style>
+</head>
+<body>
+<header class="top"><div class="in">
+  <a class="logo" href="#/">🧭 Ethik trainieren</a>
+  <span class="sub">Glück · Freizeit · Freundschaft</span>
+</div></header>
+<main id="app" tabindex="-1"></main>
+<footer>
+  <p>Hier trainierst du für die Probe. Es werden keine Namen gespeichert. Dein Fortschritt bleibt nur auf diesem Gerät.
+  <button type="button" id="reset">Fortschritt zurücksetzen</button></p>
+</footer>
+
+<script>
+'use strict';
+
+/* ---------- kleine Helfer ---------- */
+function h(tag, props, ...kids){
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(props || {})) {
+    if (k === 'class') el.className = v;
+    else if (k === 'text') el.textContent = v;
+    else if (k === 'html') el.innerHTML = v;
+    else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
+    else if (v === true) el.setAttribute(k, '');
+    else if (v !== false && v != null) el.setAttribute(k, v);
+  }
+  for (const kid of kids.flat(Infinity)) {
+    if (kid == null || kid === false) continue;
+    el.append(kid.nodeType ? kid : document.createTextNode(kid));
+  }
+  return el;
+}
+function shuffle(a){
+  const r = a.slice();
+  for (let i = r.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [r[i], r[j]] = [r[j], r[i]]; }
+  return r;
+}
+const STORE = 'ethik-trainieren-v1';
+let progress = {};
+try { progress = JSON.parse(localStorage.getItem(STORE)) || {}; } catch (e) { progress = {}; }
+function saveProgress(){ try { localStorage.setItem(STORE, JSON.stringify(progress)); } catch (e) { /* ohne Speicher weiter */ } }
+function noteFor(pct){ return pct >= 90 ? 1 : pct >= 80 ? 2 : pct >= 60 ? 3 : pct >= 40 ? 4 : pct >= 17 ? 5 : 6; }
+
+/* ---------- Aufgabentypen ---------- */
+/* Jeder Typ liefert { el, check(), result() }.  check() zeigt die Lösung, result() gibt {correct,total}. */
+
+function sortTask(d){
+  let locked = false;
+  const chosen = {};
+  const rows = shuffle(d.items.map((it, i) => ({ ...it, i }))).map(it => {
+    const btns = d.cats.map(c => h('button', {
+      type: 'button', class: 'chip', 'aria-pressed': 'false',
+      onclick: () => { if (locked) return; chosen[it.i] = c; btns.forEach((b, k) => b.setAttribute('aria-pressed', String(d.cats[k] === c))); }
+    }, c));
+    const note = h('div', { class: 'note', 'aria-live': 'polite' });
+    return { it, btns, note, row: h('div', { class: 'row' }, h('p', { class: 'item', text: it.t }), h('div', { class: 'chips' }, btns), note) };
+  });
+  return {
+    el: h('div', {}, h('p', { class: 'q', text: d.q }), d.hint ? h('p', { class: 'hint', text: d.hint }) : null, rows.map(r => r.row)),
+    check(){
+      locked = true;
+      rows.forEach(({ it, btns, note, row }) => {
+        const ok = chosen[it.i] === it.a;
+        row.classList.add(ok ? 'ok' : 'bad');
+        btns.forEach(b => { b.disabled = true; });
+        note.textContent = ok ? '✓ Richtig' : (chosen[it.i] ? '✗ Richtig wäre: ' + it.a : '✗ Nicht beantwortet. Richtig wäre: ' + it.a);
+      });
+    },
+    result(){ return { correct: d.items.filter((it, i) => chosen[i] === it.a).length, total: d.items.length }; }
+  };
+}
+
+function mcTask(d){
+  let sel = null, locked = false;
+  const opts = shuffle(d.opts);
+  const btns = opts.map(o => h('button', {
+    type: 'button', class: 'opt', 'aria-pressed': 'false',
+    onclick: () => { if (locked) return; sel = o; btns.forEach((b, i) => b.setAttribute('aria-pressed', String(opts[i] === o))); }
+  }, o.t));
+  const fb = h('div', { class: 'fb', 'aria-live': 'polite' });
+  return {
+    el: h('div', {}, h('p', { class: 'q', text: d.q }), h('div', { class: 'opts' }, btns), fb),
+    check(){
+      locked = true;
+      btns.forEach((b, i) => { b.disabled = true; if (opts[i].ok) b.classList.add('ok'); else if (opts[i] === sel) b.classList.add('bad'); });
+      fb.textContent = sel && sel.ok ? 'Richtig!' : 'Das richtige Feld ist grün markiert.';
+      if (d.why) fb.append(h('span', { class: 'why', text: d.why }));
+    },
+    result(){ return { correct: sel && sel.ok ? 1 : 0, total: 1 }; }
+  };
+}
+
+function multiTask(d){
+  let locked = false;
+  const opts = shuffle(d.opts);
+  const on = new Set();
+  const btns = opts.map(o => h('button', {
+    type: 'button', class: 'opt', 'aria-pressed': 'false',
+    onclick: e => { if (locked) return; if (on.has(o)) on.delete(o); else on.add(o); e.currentTarget.setAttribute('aria-pressed', String(on.has(o))); }
+  }, o.t));
+  const fb = h('div', { class: 'fb', 'aria-live': 'polite' });
+  return {
+    el: h('div', {}, h('p', { class: 'q', text: d.q }), h('p', { class: 'hint', text: 'Mehrere Antworten sind möglich.' }), h('div', { class: 'opts' }, btns), fb),
+    check(){
+      locked = true;
+      btns.forEach((b, i) => {
+        const o = opts[i]; b.disabled = true;
+        if (o.ok && on.has(o)) b.classList.add('ok');
+        else if (!o.ok && on.has(o)) b.classList.add('bad');
+        else if (o.ok && !on.has(o)) b.classList.add('miss');
+      });
+      const r = this.result();
+      fb.textContent = r.correct === r.total ? 'Alles richtig!' : 'Prüfe die markierten Felder.';
+      if (d.why) fb.append(h('span', { class: 'why', text: d.why }));
+    },
+    result(){ return { correct: opts.filter(o => on.has(o) === !!o.ok).length, total: opts.length }; }
+  };
+}
+
+function tfTask(d){
+  let locked = false;
+  const chosen = {};
+  const rows = d.items.map((it, i) => {
+    const btns = ['Richtig', 'Falsch'].map(label => h('button', {
+      type: 'button', class: 'chip', 'aria-pressed': 'false',
+      onclick: () => { if (locked) return; chosen[i] = label === 'Richtig'; btns.forEach(b => b.setAttribute('aria-pressed', String(b.textContent === label))); }
+    }, label));
+    const note = h('div', { class: 'note', 'aria-live': 'polite' });
+    return { it, btns, note, row: h('div', { class: 'row' }, h('p', { class: 'item', text: it.t }), h('div', { class: 'chips' }, btns), note) };
+  });
+  return {
+    el: h('div', {}, h('p', { class: 'q', text: d.q }), rows.map(r => r.row)),
+    check(){
+      locked = true;
+      rows.forEach(({ it, btns, note, row }, i) => {
+        const ok = chosen[i] === it.a;
+        row.classList.add(ok ? 'ok' : 'bad');
+        btns.forEach(b => { b.disabled = true; });
+        note.textContent = (ok ? '✓ Richtig. ' : '✗ Leider falsch. ') + (it.why || '');
+      });
+    },
+    result(){ return { correct: d.items.filter((it, i) => chosen[i] === it.a).length, total: d.items.length }; }
+  };
+}
+
+function gapTask(d){
+  const gaps = [];
+  const words = shuffle(d.words);
+  const p = h('p', { class: 'gaptext' });
+  d.parts.forEach(part => {
+    if (typeof part === 'string') { p.append(part); return; }
+    const n = gaps.length + 1;
+    const sel = h('select', { 'aria-label': 'Lücke ' + n }, h('option', { value: '', text: '…' }), words.map(w => h('option', { value: w, text: w })));
+    gaps.push({ part, sel });
+    p.append(sel);
+  });
+  const correctOf = () => {
+    const seen = {};
+    return gaps.map(g => {
+      const v = g.sel.value; let ok = g.part.a.includes(v);
+      if (ok && g.part.grp) { seen[g.part.grp] = seen[g.part.grp] || []; if (seen[g.part.grp].includes(v)) ok = false; else seen[g.part.grp].push(v); }
+      return ok;
+    });
+  };
+  return {
+    el: h('div', {}, h('p', { class: 'q', text: d.q }), d.hint ? h('p', { class: 'hint', text: d.hint }) : null,
+      h('div', { class: 'wordbox', 'aria-label': 'Wörter zum Einsetzen' }, words.map(w => h('span', { text: w }))), p),
+    check(){
+      const res = correctOf();
+      const taken = {};
+      gaps.forEach((g, i) => { if (res[i] && g.part.grp) (taken[g.part.grp] = taken[g.part.grp] || []).push(g.sel.value); });
+      gaps.forEach((g, i) => {
+        g.sel.disabled = true; g.sel.classList.add(res[i] ? 'ok' : 'bad');
+        if (!res[i]) {
+          const used = g.part.grp ? (taken[g.part.grp] = taken[g.part.grp] || []) : [];
+          const fix = g.part.a.find(x => !used.includes(x)) || g.part.a[0];
+          used.push(fix);
+          g.sel.after(h('span', { class: 'gapfix', text: ' → ' + fix + ' ' }));
+        }
+      });
+    },
+    result(){ const r = correctOf(); return { correct: r.filter(Boolean).length, total: gaps.length }; }
+  };
+}
+
+function matchTask(d){
+  const defs = shuffle(d.rows.map(r => r.a));
+  const rows = d.rows.map(r => {
+    const sel = h('select', { 'aria-label': r.t }, h('option', { value: '', text: 'Wähle die Erklärung …' }), defs.map(x => h('option', { value: x, text: x })));
+    const note = h('div', { class: 'note', 'aria-live': 'polite' });
+    return { r, sel, note, row: h('div', { class: 'row' }, h('p', { class: 'item' }, h('b', { text: r.t })), sel, note) };
+  });
+  return {
+    el: h('div', {}, h('p', { class: 'q', text: d.q }), rows.map(x => x.row)),
+    check(){
+      rows.forEach(({ r, sel, note, row }) => {
+        const ok = sel.value === r.a; sel.disabled = true;
+        row.classList.add(ok ? 'ok' : 'bad');
+        note.textContent = ok ? '✓ Richtig' : '✗ Richtig wäre: ' + r.a;
+      });
+    },
+    result(){ return { correct: rows.filter(x => x.sel.value === x.r.a).length, total: rows.length }; }
+  };
+}
+
+function selfTask(d){
+  const boxes = d.checks.map(t => h('input', { type: 'checkbox' }));
+  const box = h('div', { class: 'muster', hidden: true },
+    h('b', { text: 'Beispiel für eine gute Antwort' }), h('span', { text: d.muster }),
+    h('p', { class: 'q', style: 'margin-top:12px', text: 'Vergleiche mit deiner Antwort. Was hattest du auch?' }),
+    h('div', { class: 'checks' }, d.checks.map((t, i) => h('label', {}, boxes[i], h('span', { text: t })))));
+  const ta = h('textarea', { 'aria-label': 'Deine Antwort', placeholder: 'Schreibe hier deine Antwort …' });
+  return {
+    selfCheck: true,
+    el: h('div', {}, h('p', { class: 'q', text: d.q }), d.hint ? h('p', { class: 'hint', text: d.hint }) : null, ta,
+      h('p', { class: 'hint', text: 'Schreib zuerst deine Antwort. Dann tippst du auf „Prüfen“ und vergleichst.' }), box),
+    check(){ box.hidden = false; ta.readOnly = true; },
+    result(){ return { correct: boxes.filter(b => b.checked).length, total: boxes.length }; }
+  };
+}
+
+function buildTask(d){
+  let locked = false;
+  const picks = d.steps.map(() => null);
+  const groups = d.steps.map((s, si) => {
+    const opts = shuffle(s.opts);
+    const btns = opts.map(o => h('button', {
+      type: 'button', class: 'opt', 'aria-pressed': 'false',
+      onclick: () => { if (locked) return; picks[si] = o; btns.forEach((b, i) => b.setAttribute('aria-pressed', String(opts[i] === o))); }
+    }, o.t));
+    return { s, opts, btns };
+  });
+  const sentence = h('div', { class: 'sentence', hidden: true, 'aria-live': 'polite' });
+  return {
+    el: h('div', {}, h('p', { class: 'q', text: d.q }), h('p', { class: 'card', text: d.story }),
+      groups.map(g => [h('p', { class: 'step-label', text: g.s.label }), h('div', { class: 'opts' }, g.btns)]), sentence),
+    check(){
+      locked = true;
+      groups.forEach((g, si) => g.btns.forEach((b, i) => {
+        b.disabled = true; const o = g.opts[i];
+        if (o.ok && picks[si] === o) b.classList.add('ok');
+        else if (!o.ok && picks[si] === o) b.classList.add('bad');
+        else if (o.ok && picks[si] !== o) b.classList.add('miss');
+      }));
+      const t = picks.map(p => p ? p.t : '…');
+      sentence.textContent = t[0] + ', ' + t[1] + ', ' + t[2] + '. ' + t[3];
+      sentence.hidden = false;
+    },
+    result(){ return { correct: picks.filter((p, i) => p && p.ok).length, total: d.steps.length }; }
+  };
+}
+
+const MAKERS = { sort: sortTask, mc: mcTask, multi: multiTask, tf: tfTask, gap: gapTask, match: matchTask, self: selfTask, build: buildTask };
+const o = (t, ok) => ({ t, ok: !!ok });
+
+/* ---------- Inhalte ---------- */
+const TOPICS = [
+{
+  id: 'glueck', icon: '🍀', color: 'c-y', title: 'Glück haben oder glücklich sein',
+  merke: ['<b>Glück haben</b>: Mir passiert zufällig etwas Gutes. Das kommt von außen und ist oft nur kurz.',
+          '<b>Glücklich sein</b>: Ich fühle mich zufrieden und froh. Das Gefühl ist in mir und hält oft länger an.'],
+  tasks: [
+    { type: 'sort', q: 'Glück haben oder glücklich sein? Ordne zu.', cats: ['Glück haben', 'Glücklich sein'], items: [
+      { t: 'Ich finde zufällig zehn Euro auf dem Gehweg.', a: 'Glück haben' },
+      { t: 'Ich bin zufrieden, weil ich einen schönen Tag mit meinen Freunden hatte.', a: 'Glücklich sein' },
+      { t: 'Mein Bus fährt genau los, als ich an der Haltestelle ankomme.', a: 'Glück haben' },
+      { t: 'Ich freue mich noch lange über ein Gespräch mit meiner besten Freundin.', a: 'Glücklich sein' },
+      { t: 'Ich gewinne beim Schulfest einen Preis in der Lostrommel.', a: 'Glück haben' },
+      { t: 'Ich fühle mich wohl, weil ich meiner Oma beim Backen geholfen habe.', a: 'Glücklich sein' } ] },
+    { type: 'mc', q: 'Was passt zu „Glück haben“?', why: 'Glück haben hat mit Zufall zu tun. Man kann es nicht planen.', opts: [
+      o('Es hat mit Zufall zu tun.', 1), o('Es ist ein langes Gefühl von Zufriedenheit.'), o('Man kann es sich jeden Tag selbst machen.') ] },
+    { type: 'mc', q: 'Was passt zu „glücklich sein“?', why: 'Glücklich sein ist ein Gefühl in mir, zum Beispiel Zufriedenheit und Freude.', opts: [
+      o('Ein Gefühl von Zufriedenheit und Freude, das länger anhalten kann.', 1), o('Etwas Gutes passiert nur durch Zufall.'), o('Ich gewinne bei einer Verlosung.') ] },
+    { type: 'self', q: 'Glück haben oder glücklich sein? Beschreibe den Unterschied.', hint: 'Schreibe in 1–2 ganzen Sätzen.',
+      muster: 'Glück haben bedeutet, dass mir zufällig etwas Gutes passiert, zum Beispiel wenn ich Geld finde. Glücklich sein ist ein Gefühl von Zufriedenheit und Freude, das länger anhalten kann.',
+      checks: ['Ich habe geschrieben, dass Glück haben mit Zufall zu tun hat.', 'Ich habe geschrieben, dass glücklich sein ein Gefühl (Zufriedenheit, Freude) ist.'] }
+  ]
+},
+{
+  id: 'gluecksgefuehl', icon: '🧠', color: 'c-p', title: 'Was ist Glück? Gefühl und Gehirn',
+  merke: ['Glück ist ein <b>Gefühl</b>.', 'Wer viel <b>Freude</b> und <b>Zufriedenheit</b> fühlt, ist glücklich.',
+          'Glücksgefühle werden im <b>Gehirn</b> ausgelöst. Die Botenstoffe heißen <b>Serotonin</b> und <b>Dopamin</b>.'],
+  tasks: [
+    { type: 'gap', q: 'Ergänze den Text mit den Wörtern aus dem Kasten.', hint: 'Ein Wort im Kasten bleibt übrig.',
+      words: ['Gefühl', 'Freude', 'Zufriedenheit', 'Gehirn', 'Serotonin', 'Dopamin', 'Ärger'],
+      parts: ['Glück ist ein ', { a: ['Gefühl'] }, '. Wenn eine Person viel ', { a: ['Freude', 'Zufriedenheit'], grp: 'f' }, ' und ',
+              { a: ['Freude', 'Zufriedenheit'], grp: 'f' }, ' fühlt, ist sie glücklich. Glücksgefühle werden im ', { a: ['Gehirn'] },
+              ' ausgelöst. Die Botenstoffe heißen ', { a: ['Serotonin', 'Dopamin'], grp: 'b' }, ' und ', { a: ['Serotonin', 'Dopamin'], grp: 'b' }, '.'] },
+    { type: 'gap', q: 'Noch ein Text. Ergänze mit den Wörtern aus dem Kasten.', hint: 'Zwei Wörter bleiben übrig.',
+      words: ['Gehirn', 'Serotonin', 'Dopamin', 'Freude', 'Bauch', 'Ärger'],
+      parts: ['Wenn ich etwas Schönes erlebe, schüttet mein ', { a: ['Gehirn'] }, ' Botenstoffe aus. Zwei davon sind ',
+              { a: ['Serotonin', 'Dopamin'], grp: 'b' }, ' und ', { a: ['Serotonin', 'Dopamin'], grp: 'b' }, '. Danach fühle ich ', { a: ['Freude'] }, '.'] },
+    { type: 'mc', q: 'Wo werden Glücksgefühle ausgelöst?', why: 'Das Gehirn schüttet die Botenstoffe aus.', opts: [o('Im Gehirn', 1), o('Im Bauch'), o('In den Händen')] },
+    { type: 'multi', q: 'Welche Wörter sind Botenstoffe für Glücksgefühle?', why: 'Serotonin und Dopamin sind Botenstoffe. Zufriedenheit und Ärger sind Gefühle.', opts: [
+      o('Serotonin', 1), o('Dopamin', 1), o('Zufriedenheit'), o('Ärger') ] }
+  ]
+},
+{
+  id: 'materiell', icon: '🎁', color: 'c-o', title: 'Materielles und immaterielles Glück',
+  merke: ['<b>Materielles Glück</b>: Ich freue mich über Dinge, die man anfassen oder kaufen kann (zum Beispiel ein Fahrrad).',
+          '<b>Immaterielles Glück</b>: Ich freue mich über etwas, das man nicht anfassen kann (zum Beispiel Freundschaft, Zeit mit der Familie, Gesundheit).'],
+  tasks: [
+    { type: 'sort', q: 'Materielles oder immaterielles Glück? Ordne zu.', cats: ['Materiell', 'Immateriell'], items: [
+      { t: 'ein neues Smartphone', a: 'Materiell' }, { t: 'Zeit mit meiner Familie', a: 'Immateriell' },
+      { t: 'mein Lieblingspullover', a: 'Materiell' }, { t: 'Freunde, die zu mir halten', a: 'Immateriell' },
+      { t: 'ein Lob von meiner Lehrerin', a: 'Immateriell' }, { t: 'ein neues Fahrrad', a: 'Materiell' },
+      { t: 'gesund sein', a: 'Immateriell' } ] },
+    { type: 'mc', q: 'Ein Spaziergang mit meinem besten Freund macht mich glücklich. Welche Art von Glück ist das?', why: 'Man kann einen schönen Moment nicht anfassen. Darum ist es immaterielles Glück.', opts: [
+      o('Immaterielles Glück', 1), o('Materielles Glück') ] },
+    { type: 'self', q: 'Was bedeutet materielles Glück und was bedeutet immaterielles Glück?', hint: 'Schreibe in ganzen Sätzen. Nenne jeweils ein Beispiel.',
+      muster: 'Materielles Glück bedeutet, dass ich mich über Dinge freue, die man anfassen kann, zum Beispiel ein neues Fahrrad. Immaterielles Glück bedeutet, dass ich mich über etwas freue, das man nicht anfassen kann, zum Beispiel Freundschaft.',
+      checks: ['Ich habe materielles Glück erklärt (Dinge, die man anfassen kann).', 'Ich habe immaterielles Glück erklärt (nicht anfassbar, zum Beispiel Gefühle oder Freunde).', 'Ich habe zu beiden ein Beispiel genannt.'] }
+  ]
+},
+{
+  id: 'zeit', icon: '⏰', color: 'c-b', title: 'Die drei Arten von Zeit',
+  merke: ['<b>Fremdbestimmte Zeit</b>: Andere bestimmen, was ich tue (zum Beispiel Schule).',
+          '<b>Zweckgebundene Zeit</b>: Das muss sein, damit ich gut leben kann (zum Beispiel Schlafen und Essen).',
+          '<b>Freizeit</b>: Ich bestimme selbst, was ich tue.'],
+  tasks: [
+    { type: 'match', q: 'Welche Erklärung passt zu welcher Zeitart?', rows: [
+      { t: 'Fremdbestimmte Zeit', a: 'Andere bestimmen, was ich tue.' },
+      { t: 'Zweckgebundene Zeit', a: 'Das muss sein, damit ich gut leben kann.' },
+      { t: 'Freizeit', a: 'Ich bestimme selbst.' } ] },
+    { type: 'sort', q: 'Welche Zeitart ist das? Ordne zu.', cats: ['Fremdbestimmt', 'Zweckgebunden', 'Freizeit'], items: [
+      { t: 'in der Schule sein', a: 'Fremdbestimmt' }, { t: 'Schlafen', a: 'Zweckgebunden' },
+      { t: 'mit Freunden Fußball spielen', a: 'Freizeit' }, { t: 'Essen', a: 'Zweckgebunden' },
+      { t: 'Hausaufgaben machen, die die Lehrerin aufgegeben hat', a: 'Fremdbestimmt' },
+      { t: 'Zähne putzen', a: 'Zweckgebunden' }, { t: 'ein Buch lesen, das ich mir selbst ausgesucht habe', a: 'Freizeit' } ] }
+  ]
+},
+{
+  id: 'freizeit', icon: '✅', color: 'c-g', title: 'Freizeit: richtig oder falsch?',
+  merke: ['Freizeit ist die Zeit, in der ich selbst entscheide.', 'Zu viel Bildschirmzeit kann mir Zeit für Bewegung, Freunde und Schlaf wegnehmen.',
+          'Schöne Freizeit muss nicht teuer sein.'],
+  tasks: [
+    { type: 'tf', q: 'Richtig oder falsch? Kreuze an.', items: [
+      { t: 'Freizeit ist die Zeit, in der ich selbst entscheide, was ich tue.', a: true, why: 'Genau das ist Freizeit.' },
+      { t: 'Zu viel Zeit vor dem Bildschirm kann mir die Zeit für Bewegung, Freunde und Schlaf nehmen.', a: true, why: 'Darauf sollte man achten.' },
+      { t: 'Freizeit ist nur sinnvoll, wenn ich möglichst viel Geld ausgebe.', a: false, why: 'Schöne Freizeit muss nichts kosten.' } ] },
+    { type: 'tf', q: 'Noch mehr Aussagen. Richtig oder falsch?', items: [
+      { t: 'Auch Ausruhen und Nichtstun können Freizeit sein.', a: true, why: 'Ich entscheide selbst, wie ich mich erhole.' },
+      { t: 'Hausaufgaben gehören zur Freizeit.', a: false, why: 'Hausaufgaben sind fremdbestimmte Zeit.' },
+      { t: 'Mit Freunden draußen zu spielen kann Freizeit wertvoll machen.', a: true, why: 'Gemeinsame Zeit und Bewegung tun gut.' } ] }
+  ]
+},
+{
+  id: 'wertvoll', icon: '🌟', color: 'c-y', title: 'Was macht Freizeit wertvoll?',
+  merke: ['Wertvoll ist Freizeit, wenn sie mir guttut: mit Freunden oder Familie, mit Bewegung, mit Erholung, mit einem Hobby.',
+          'Nicht wertvoll ist es, wenn ich nur Zeit „totschlage“ oder Geld ausgebe, weil andere es auch tun.'],
+  tasks: [
+    { type: 'multi', q: 'Was macht Freizeit wertvoll? Wähle alles aus, was passt.', why: 'Wertvoll ist, was mir guttut. Geld und Dauer-Scrollen allein machen Freizeit nicht wertvoll.', opts: [
+      o('Zeit mit Freunden oder Familie', 1), o('etwas tun, was mir Spaß macht', 1), o('Bewegung an der frischen Luft', 1), o('mich erholen', 1),
+      o('möglichst viel Geld ausgeben'), o('den ganzen Tag nur am Handy scrollen') ] },
+    { type: 'self', q: 'Was macht Freizeit wertvoll? Nenne zwei Dinge.', hint: 'Schreibe jeweils ein Wort oder einen kurzen Satz.',
+      muster: 'Zum Beispiel: Zeit mit Freunden, ein Hobby, Sport, mich ausruhen, etwas Neues ausprobieren.',
+      checks: ['Ich habe ein Ding genannt, das Freizeit wertvoll macht.', 'Ich habe ein zweites Ding genannt.'] }
+  ]
+},
+{
+  id: 'freundschaft', icon: '🤝', color: 'c-g', title: 'Freundschaft: Das ist mir wichtig',
+  merke: ['Gute Freunde sind zum Beispiel <b>ehrlich</b>, <b>zuverlässig</b>, <b>hilfsbereit</b> und <b>verständnisvoll</b>.',
+          'Ich kann ein guter Freund oder eine gute Freundin sein, indem ich zuhöre, helfe, Geheimnisse für mich behalte und mich nach einem Streit entschuldige.'],
+  tasks: [
+    { type: 'multi', q: 'Welche Eigenschaften sind bei einem guten Freund oder einer guten Freundin wichtig?', why: 'Wer andere auslacht oder Geheimnisse verrät, ist kein guter Freund.', opts: [
+      o('ehrlich', 1), o('zuverlässig', 1), o('hilfsbereit', 1), o('verständnisvoll', 1), o('lacht mich aus, wenn mir etwas misslingt'), o('erzählt meine Geheimnisse weiter') ] },
+    { type: 'sort', q: 'Wie verhält sich ein guter Freund? Ordne zu.', cats: ['Freundschaftlich', 'Nicht freundschaftlich'], items: [
+      { t: 'Ich höre zu, wenn jemand Kummer hat.', a: 'Freundschaftlich' }, { t: 'Ich erzähle ein Geheimnis weiter.', a: 'Nicht freundschaftlich' },
+      { t: 'Ich entschuldige mich nach einem Streit.', a: 'Freundschaftlich' }, { t: 'Ich lache über die Fehler von anderen.', a: 'Nicht freundschaftlich' },
+      { t: 'Ich helfe bei den Hausaufgaben.', a: 'Freundschaftlich' } ] },
+    { type: 'self', q: 'Beende den Satz: Ich kann ein guter Freund / eine gute Freundin sein, indem ich …', hint: 'Schreibe einen ganzen Satz.',
+      muster: '… zuhöre, ehrlich bin, Geheimnisse für mich behalte und meinen Freunden helfe.',
+      checks: ['Mein Satz passt zum Anfang („indem ich …“).', 'Ich habe mindestens ein Verhalten genannt, das Freundschaft stärkt.'] }
+  ]
+},
+{
+  id: 'ich', icon: '💬', color: 'c-p', title: 'Streit unter Freunden: Ich-Botschaften',
+  merke: ['<b>Du-Botschaft</b> = Vorwurf („Du bist so rücksichtslos!“). Sie macht den Streit meist schlimmer.',
+          '<b>Ich-Botschaft</b> = Ich sage, wie es mir geht: <i>Ich fühle … / wenn … / weil … / Ich wünsche mir …</i>'],
+  tasks: [
+    { type: 'sort', q: 'Du-Botschaft oder Ich-Botschaft? Ordne zu.', cats: ['Du-Botschaft', 'Ich-Botschaft'], items: [
+      { t: 'Du bist so rücksichtslos!', a: 'Du-Botschaft' },
+      { t: 'Ich fühle mich traurig, wenn du mein Trikot ohne zu fragen nimmst.', a: 'Ich-Botschaft' },
+      { t: 'Stell dich nicht so an!', a: 'Du-Botschaft' },
+      { t: 'Ich wünsche mir, dass du vorher fragst.', a: 'Ich-Botschaft' },
+      { t: 'Du nervst mit deinem blöden Trikot!', a: 'Du-Botschaft' },
+      { t: 'Ich ärgere mich, weil mir das Trikot wichtig ist.', a: 'Ich-Botschaft' } ] },
+    { type: 'build', q: 'Baue eine Ich-Botschaft für Jonas.', story: 'Ben hat Jonas’ Fußballtrikot ohne zu fragen angezogen. Jetzt streiten sie. Jonas hat gesagt: „Du bist so rücksichtslos! Du nimmst immer einfach meine Sachen!“', steps: [
+      { label: '1. Wie fühlt sich Jonas?', opts: [o('Ich fühle mich ärgerlich', 1), o('Ich fühle mich traurig', 1), o('Du bist so rücksichtslos'), o('Du nervst')] },
+      { label: '2. Was ist passiert?', opts: [o('wenn du mein Trikot ohne zu fragen anziehst', 1), o('wenn du immer alles nimmst'), o('wenn du so gemein bist')] },
+      { label: '3. Warum ist das für Jonas so?', opts: [o('weil mir das Trikot wichtig ist', 1), o('weil ich mich nicht ernst genommen fühle', 1), o('weil du keine Ahnung hast')] },
+      { label: '4. Was wünscht sich Jonas?', opts: [o('Ich wünsche mir, dass du vorher fragst.', 1), o('Ich wünsche mir, dass du dich entschuldigst.', 1), o('Ich wünsche mir, dass du verschwindest.')] } ] },
+    { type: 'build', q: 'Baue noch eine Ich-Botschaft. Diesmal für Lena.', story: 'Mia hat Lenas Heft ohne zu fragen mitgenommen. Lena braucht es heute für die Hausaufgabe.', steps: [
+      { label: '1. Wie fühlt sich Lena?', opts: [o('Ich bin sauer', 1), o('Ich bin enttäuscht', 1), o('Du bist so unzuverlässig'), o('Du denkst nie an andere')] },
+      { label: '2. Was ist passiert?', opts: [o('wenn du mein Heft mitnimmst, ohne zu fragen', 1), o('wenn du immer alles kaputt machst'), o('wenn du wieder mal faul bist')] },
+      { label: '3. Warum ist das für Lena so?', opts: [o('weil ich es heute für die Hausaufgabe brauche', 1), o('weil du nie nachdenkst'), o('weil du sowieso alles falsch machst')] },
+      { label: '4. Was wünscht sich Lena?', opts: [o('Ich wünsche mir, dass du mir vorher Bescheid sagst.', 1), o('Ich wünsche mir, dass du mich in Ruhe lässt.'), o('Ich wünsche mir, dass du dich schämst.')] } ] },
+    { type: 'self', q: 'Schreibe selbst eine Ich-Botschaft für Jonas.', hint: 'Tipp: Ich fühle … / wenn … / weil … / Ich wünsche mir …',
+      muster: 'Ich fühle mich traurig, wenn du mein Trikot ohne zu fragen anziehst, weil es mir wichtig ist. Ich wünsche mir, dass du vorher fragst.',
+      checks: ['Ich habe gesagt, wie ich mich fühle („Ich fühle …“).', 'Ich habe beschrieben, was passiert ist („wenn …“).', 'Ich habe einen Wunsch genannt („Ich wünsche mir …“).', 'Ich habe keinen Vorwurf mit „Du …“ benutzt.'] }
+  ]
+}
+];
+
+/* ---------- Ansichten ---------- */
+const app = document.getElementById('app');
+function show(...nodes){ app.replaceChildren(...nodes); window.scrollTo(0, 0); app.focus({ preventScroll: true }); }
+
+function statusOf(id){
+  const p = progress[id];
+  if (!p) return { text: 'Noch nicht trainiert', done: false };
+  if (p.best >= 80) return { text: 'Geschafft ⭐ (' + p.best + ' %)', done: true };
+  return { text: 'Das trainierst du noch (' + p.best + ' %)', done: false };
+}
+
+function renderHome(){
+  const probeBest = progress.probe ? 'Beste Note: ' + progress.probe.note : 'Alle Themen gemischt';
+  show(
+    h('h1', { text: 'Trainiere für die Ethik-Probe' }),
+    h('p', { class: 'lead', text: 'Such dir ein Thema aus. Du bekommst sofort eine Rückmeldung. Wenn du alle Themen kannst, probiere die Mini-Probe.' }),
+    h('div', { class: 'grid' }, TOPICS.map(t => {
+      const s = statusOf(t.id);
+      return h('a', { class: 'tile ' + t.color + (s.done ? ' done' : ''), href: '#/t/' + t.id },
+        h('span', { class: 'ico', 'aria-hidden': 'true', text: t.icon }),
+        h('span', {}, h('span', { class: 't', text: t.title }), h('span', { class: 'st', text: s.text })));
+    })),
+    h('a', { class: 'tile probe-tile', href: '#/probe' },
+      h('span', { class: 'ico', 'aria-hidden': 'true', text: '📝' }),
+      h('span', {}, h('span', { class: 't', text: 'Mini-Probe (10 Aufgaben)' }), h('span', { class: 'st', text: probeBest })))
+  );
+}
+
+/* Läuft eine Aufgabenfolge ab und ruft am Ende onDone(correct,total) */
+function runTasks(title, taskDefs, intro, onDone, backHref){
+  let idx = -1, correct = 0, total = 0, current = null;
+  function dots(){ return h('div', { class: 'dots', 'aria-hidden': 'true' }, taskDefs.map((_, i) => h('span', { class: 'dot ' + (i < idx ? 'past' : i === idx ? 'now' : '') }))); }
+  function next(){
+    idx++;
+    if (idx >= taskDefs.length) { onDone(correct, total); return; }
+    const d = taskDefs[idx];
+    current = MAKERS[d.type](d);
+    const main = h('button', { type: 'button', class: 'btn', onclick: () => {
+      if (!checked) { checked = true; current.check(); main.textContent = idx === taskDefs.length - 1 ? 'Ergebnis ansehen' : 'Weiter'; }
+      else { const r = current.result(); correct += r.correct; total += r.total; next(); }
+    } }, 'Prüfen');
+    let checked = false;
+    show(h('h1', { text: title }), h('div', { class: 'bar' }, dots(), h('span', { class: 'hint', style: 'margin:0', text: 'Aufgabe ' + (idx + 1) + ' von ' + taskDefs.length })),
+      h('div', { class: 'card' }, current.el), h('div', { class: 'actions' }, main, h('a', { class: 'btn sec', href: backHref, text: 'Abbrechen' })));
+  }
+  if (intro) show(h('h1', { text: title }), intro, h('div', { class: 'actions' }, h('button', { type: 'button', class: 'btn', onclick: next, text: 'Los geht’s' }), h('a', { class: 'btn sec', href: backHref, text: 'Zurück' })));
+  else next();
+}
+
+function renderTopic(id){
+  const t = TOPICS.find(x => x.id === id);
+  if (!t) { location.hash = '#/'; return; }
+  const intro = h('div', { class: 'card merke' }, h('h2', { text: 'Das solltest du wissen' }), h('ul', {}, t.merke.map(m => h('li', { html: m }))));
+  runTasks(t.title, t.tasks, intro, (c, tot) => {
+    const pct = Math.round(100 * c / tot);
+    const old = progress[t.id] ? progress[t.id].best : 0;
+    progress[t.id] = { best: Math.max(old, pct) }; saveProgress();
+    const good = pct >= 80;
+    show(h('h1', { text: t.title }),
+      h('div', { class: 'card' }, h('div', { class: 'stars', 'aria-hidden': 'true', text: good ? '⭐⭐⭐' : pct >= 50 ? '⭐⭐' : '⭐' }),
+        h('p', { class: 'score', text: c + ' von ' + tot + ' Punkten (' + pct + ' %)' }),
+        h('p', { text: good ? 'Super, das kannst du schon gut!' : 'Das trainierst du noch. Lies die Merk-Karte noch einmal und probiere es nochmal.' })),
+      h('div', { class: 'actions' }, h('a', { class: 'btn', href: '#/t/' + t.id + '?' + Date.now(), text: 'Nochmal trainieren' }), h('a', { class: 'btn sec', href: '#/', text: 'Zurück zur Übersicht' })));
+  }, '#/');
+}
+
+function renderProbe(){
+  const auto = TOPICS.map(t => t.tasks.filter(d => d.type !== 'self'));
+  const firsts = auto.map(list => shuffle(list)[0]);
+  const rest = shuffle(auto.flatMap(list => list).filter(d => !firsts.includes(d))).slice(0, 2);
+  const tasks = shuffle([...firsts, ...rest]).slice(0, 10);
+  const intro = h('div', { class: 'card merke' }, h('h2', { text: 'So funktioniert die Mini-Probe' }),
+    h('ul', {}, ['10 Aufgaben aus allen Themen, gemischt.', 'Am Ende siehst du deine Punkte und eine Note.', 'Das ist nur zum Trainieren. Du kannst sie so oft machen, wie du willst.'].map(x => h('li', { text: x }))));
+  runTasks('Mini-Probe', tasks, intro, (c, tot) => {
+    const pct = 100 * c / tot, n = noteFor(pct);
+    const old = progress.probe ? progress.probe.note : 7;
+    progress.probe = { note: Math.min(old, n) }; saveProgress();
+    show(h('h1', { text: 'Mini-Probe geschafft' }),
+      h('div', { class: 'card' }, h('p', { class: 'score', text: c + ' von ' + tot + ' Punkten' }), h('p', {}, 'Deine Note beim Trainieren: ', h('span', { class: 'note-big', text: String(n) })),
+        h('p', { text: n <= 2 ? 'Sehr gut, du bist gut vorbereitet!' : n <= 4 ? 'Schon ganz gut. Trainiere die Themen, bei denen es noch hakt.' : 'Das trainierst du noch. Lies die Merk-Karten und probiere es nochmal.' })),
+      h('div', { class: 'actions' }, h('a', { class: 'btn', href: '#/probe?' + Date.now(), text: 'Noch eine Mini-Probe' }), h('a', { class: 'btn sec', href: '#/', text: 'Zurück zur Übersicht' })));
+  }, '#/');
+}
+
+function route(){
+  const hash = (location.hash || '#/').split('?')[0];
+  if (hash.startsWith('#/t/')) renderTopic(hash.slice(4));
+  else if (hash === '#/probe') renderProbe();
+  else renderHome();
+}
+window.addEventListener('hashchange', route);
+document.getElementById('reset').addEventListener('click', () => {
+  if (confirm('Möchtest du deinen Fortschritt auf diesem Gerät wirklich löschen?')) { progress = {}; saveProgress(); route(); }
+});
+route();
+</script>
+</body>
+</html>
