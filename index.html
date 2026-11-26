@@ -52,6 +52,9 @@ button:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible
 .c-y .ico{background:var(--y)}.c-g .ico{background:var(--g)}.c-b .ico{background:var(--b)}.c-p .ico{background:var(--p)}.c-o .ico{background:var(--o)}
 .probe-tile{background:var(--accent-soft);border-color:var(--accent)}
 .card{background:var(--card);border:2px solid var(--line);border-radius:var(--radius);padding:16px;margin:12px 0}
+.qr{display:flex;gap:16px;align-items:center;margin-top:20px}
+.qr img{flex:none;background:#fff;padding:6px;border-radius:8px;border:2px solid var(--line);max-width:40%;height:auto}
+.qr p{margin:0}
 .merke{border-left:8px solid var(--accent)}
 .merke ul{margin:.3em 0 .3em 1.1em;padding:0}
 .merke li{margin:.3em 0}
@@ -525,7 +528,10 @@ function renderHome(){
     })),
     h('a', { class: 'tile probe-tile', href: '#/probe' },
       h('span', { class: 'ico', 'aria-hidden': 'true', text: '📝' }),
-      h('span', {}, h('span', { class: 't', text: 'Mini-Probe (10 Aufgaben)' }), h('span', { class: 'st', text: probeBest })))
+      h('span', {}, h('span', { class: 't', text: 'Mini-Probe (10 Aufgaben)' }), h('span', { class: 'st', text: probeBest }))),
+    h('div', { class: 'card qr' },
+      h('img', { src: 'qr-code.png', width: 160, height: 160, alt: 'QR-Code zu dieser Seite' }),
+      h('p', {}, h('b', { text: 'Seite weitergeben' }), h('br'), 'Scanne den Code mit dem Handy oder Tablet, dann öffnet sich diese Seite.'))
   );
 }
 
